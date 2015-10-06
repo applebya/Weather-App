@@ -15402,11 +15402,7 @@ angular.module('angular-c3', [])
       replace: true,
       link: function(scope, element, attrs) {
         //available option to show gridlines for chart
-        //assign a type of line if undefined
-        console.log("scope", scope);
-        console.log("element", element);
-        console.log("attrs", attrs);
-        
+        //assign a type of line if undefined        
         if(!scope.config.type) scope.config.type = 'line';
 
         //generate c3 chart data
