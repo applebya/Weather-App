@@ -18,52 +18,60 @@ angular.module('weatherApp', ['angular-c3'])
 	.controller('ChartController', function ($log, $scope, dataService, c3Factory) {
 
 		// Load in our weather data
-		$scope.refreshWeatherData = function (weatherData) {
-			var promise = dataService.getWeatherData('Toronto');
+		$scope.refreshWeatherData = function (city) {
+			var promise = dataService.getWeatherData(city);
 			console.log("promise", promise);
 			// Handle data promise
 			promise.then(
 				function (payload) {
 					$log.info("Success:", payload.data);
 
+					var rawData = _.clone(payload.data);
+
+					$log.info("Raw data:", rawData);
+
+					// Map out to object with date & temperature
+					var list = _.clone(rawData.list)
+					.map(function (listItem) {
+						return {
+							date: listItem.dt,
+							temp: listItem.main.temp
+						}
+					});
+
+					$log.info("List:", list);
+
 					c3Factory.get('chart').then(function(chart) {
 						console.log("chart", chart);
 					  chart.load({
-					      columns: [
-					          ['data1', 30, 200, 100, 400, 150, 250, 50, 100, 250],
-					          ['data2', 50, 25, 133, 46, 693, 345, 34, 14, 55]
-					      ]
+					    json: list,
+					    keys: {
+					    	x: 'date',
+					    	value: ['temp']
+					    }
 					  });
 					});
-
-					return payload.data;
 				},
 				function (err) {
-					console.log("Failure");
-					$log.error('failure loading weather data', err);
+					$log.error('Failure loading weather data', err);
 				}			
 			);
 		}
 
-		$scope.refreshWeatherData()
+		$scope.refreshWeatherData('Toronto');
 
-	  $scope.config = {
-	    data: {
-	      x: 'x',
-	      columns: [
-	          ['x', '2012-12-29', '2012-12-30', '2012-12-31'],
-	          ['data1', 230, 300, 330],
-	          ['data2', 190, 230, 200],
-	          ['data3', 90, 130, 180]
-	      ]
-	    },
-	    axis: {
-	        x: {
-	            type: 'timeseries',
-	            tick: {
-	                format: '%m/%d',
-	            }
-	        }
-	    }
-	  };
+		// Initial chart config before loading in JSON
+		$scope.config = {
+		  data: {
+		    json: [], // Empty until openweather request completed		    
+		  },
+		  axis: {
+		      x: {
+		          type: 'timeseries',
+		          tick: {
+		              format: '%m/%d',
+		          }
+		      }
+		  }
+		};
 	})
