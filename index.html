@@ -7,11 +7,42 @@
 		<!-- CSS -->
 		<link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.min.css">
 		<link rel="stylesheet" href="./bower_components/angular-c3/dist/c3-chart.css">
+		<link rel="stylesheet" href="./assets/css/main.css">
 	</head>
-	<body ng-controller="ChartController">
+	<body ng-controller="ChartController">		
 		<div class="container">
-			<h1>Weather App</h1>
-			<c3-chart id="chart" config="chartConfig"></c3-chart>
+
+			<header>
+				<h1>Weather for {{selectedCity}}</h1>
+			</header>
+
+			<div class="row">
+				<div class="col-md-9" id="temp-chart">
+					<h3>5-Day Temperature Forecast</h3>
+					<c3-chart id="tempChart" config="tempConfig"></c3-chart>
+				</div>
+				<div class="col-md-3" id="press-chart">
+					<h3>Average Pressure</h3>
+					<br><br>
+					<c3-chart id="pressChart" config="pressConfig"></c3-chart>
+				</div>
+			</div>
+
+			<label>Filter by Canadian city:</label>
+			<input class="form-control" type="text" ng-model="searchCity" placeholder="Start typing a city name...">
+
+			<h4>Cities</h4>
+			<ul class="list-group">
+				<li class="list-group-item" ng-repeat="city in cityList | filter: searchCity | orderBy: 'name'"ng-click="refreshWeatherData(city.name)">
+					{{city.name}}
+				</li>
+			</ul>			
+
+		</div>
+
+		<div id="credit">
+			Designed by Andrew Appleby - 
+			<a href="https://github.com/applebya/WeatherApp">View source on Github</a>
 		</div>
 
 		<!-- Libraries -->	
@@ -22,6 +53,6 @@
 		<script src="./node_modules/moment/min/moment.min.js"></script>
 		<script src="./node_modules/bootstrap/dist/js/bootstrap.min.js"></script>		
 		<!-- Custom -->
-		<script src="./main.js"></script>
+		<script src="./app/main.js"></script>
 	</body>
 </html>
