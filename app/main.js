@@ -42,8 +42,6 @@ angular.module('weatherApp', ['angular-c3'])
 							name: city
 						}
 					})
-
-					// console.log("Data", data);
 				},
 				function (err) {
 					$log.error("Failure loading cityList", err);
@@ -61,7 +59,6 @@ angular.module('weatherApp', ['angular-c3'])
 
 					// Grab our data set
 					var rawData = _.clone(payload.data);
-					// $log.info("Raw data:", rawData);
 
 					// Change selected city in scope
 					$scope.selectedCity = rawData.city
@@ -75,7 +72,6 @@ angular.module('weatherApp', ['angular-c3'])
 							pressure: listItem.main.pressure
 						}
 					});
-					// $log.info("List:", list);
 
 					// Ok, let's plot this new data on the temp chart!
 					c3Factory.get('tempChart').then(function (chart) {
