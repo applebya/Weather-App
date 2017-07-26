@@ -4,6 +4,7 @@ body {
 	-moz-background-size: cover;
 	-o-background-size: cover;
 	background-size: cover;
+	padding-bottom: 35px;
 }
 
 h1 {
@@ -24,9 +25,7 @@ h1,h2,h3,h4,h5,label {
 .list-group {
 	opacity: 0.75;
 	color: #000;
-	padding: 15px;
-	max-height: 300px;
-	overflow-y: auto;
+	padding: 15px 0;
 }
 
 .list-group-item:hover {
@@ -39,6 +38,10 @@ h3 {
 }
 
 #credit {
+	position: fixed;
+	bottom: 0;
+	right: 0;
+	left: 0;
 	text-align: center;
 	background: rgba(255,255,255,0.75);
 	padding: 15px;
