@@ -5,11 +5,11 @@ angular.module('weatherApp', ['angular-c3'])
 	.factory('dataService', function ($http) {
 
 		return {
-			getWeatherData: function (city) {
-				console.log("Fetching Data for:", city);
+			getWeatherData: function (cityName) {
+				console.log("Fetching Data for:", cityName);
 				return $http({
 					method: 'GET',
-					url: 'http://api.openweathermap.org/data/2.5/forecast/city?q='+city+'&units=metric&mo'
+					url: 'http://api.openweathermap.org/data/2.5/forecast?q='+cityName+'&units=metric&APPID=d946e5ceb14d4ee5c148e9264d90d1dc'
 				});
 			},
 
@@ -29,23 +29,21 @@ angular.module('weatherApp', ['angular-c3'])
 		// Load in full list of cities (Yeh, it's huge!)
 		$scope.loadCityList = function (city) {
 			var promise = dataService.getCityList();
+			var id = 0;
 
 			// Handle promise
 			promise.then(
-				function (payload) {
-					console.log("Cities JSON:", payload.data);
+				function ({data}) {
+					$scope.cityList = data.map(city => {
+						id++;
 
-					var id = 0
-					var cityList = _.clone(payload.data)
-					.map(function (city) {
-						id++
 						return {
-							id: id,
+							id,
 							name: city
 						}
-					});
-					console.log("Cities now:", cityList);
-					$scope.cityList = cityList;
+					})
+
+					// console.log("Data", data);
 				},
 				function (err) {
 					$log.error("Failure loading cityList", err);
@@ -56,17 +54,17 @@ angular.module('weatherApp', ['angular-c3'])
 		$scope.loadCityList();
 
 		// Load in our weather data
-		$scope.refreshWeatherData = function (city) {
-			dataService.getWeatherData(city).then(
+		$scope.refreshWeatherData = function (cityName) {
+			dataService.getWeatherData(cityName).then(
 				// Success
 				function (payload) {
 
 					// Grab our data set
 					var rawData = _.clone(payload.data);
-					$log.info("Raw data:", rawData);
+					// $log.info("Raw data:", rawData);
 
 					// Change selected city in scope
-					$scope.selectedCity = rawData.city.name
+					$scope.selectedCity = rawData.city
 
 					// Map out to object with date & temperature
 					var list = _.clone(rawData.list)
@@ -77,7 +75,7 @@ angular.module('weatherApp', ['angular-c3'])
 							pressure: listItem.main.pressure
 						}
 					});
-					$log.info("List:", list);
+					// $log.info("List:", list);
 
 					// Ok, let's plot this new data on the temp chart!
 					c3Factory.get('tempChart').then(function (chart) {
