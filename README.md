@@ -1,5 +1,5 @@
 # Weather App
-Exercise in AngularJS and c3js
+Technical challenge for Brili in AngularJS and C3js. I was later hired to build out their analytics module, which was a whole lot of fun!
 
 # Run
 1. `npm install`
