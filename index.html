@@ -13,7 +13,7 @@
 		<div class="container">
 
 			<header>
-				<h1>Weather for {{selectedCity}}</h1>
+				<h1 ng-cloak>Weather for {{selectedCity.name}}</h1>
 			</header>
 
 			<div class="row">
@@ -28,15 +28,19 @@
 				</div>
 			</div>
 
-			<label>Filter by Canadian city:</label>
+			<h4>Filter by Canadian city:</h4>
 			<input class="form-control" type="text" ng-model="searchCity" placeholder="Start typing a city name...">
 
-			<h4>Cities</h4>
-			<ul class="list-group">
-				<li class="list-group-item" ng-repeat="city in cityList | filter: searchCity | orderBy: 'name'"ng-click="refreshWeatherData(city.name)">
-					{{city.name}}
-				</li>
-			</ul>			
+			<br />
+
+			<div ng-show="searchCity.length">
+				<h5>City Results</h5>
+				<ul class="list-group">
+					<li class="list-group-item" ng-repeat="city in cityList | filter: searchCity | orderBy: 'name'" ng-click="refreshWeatherData(city.name)">
+						{{city.name}}
+					</li>
+				</ul>
+			</div>
 
 		</div>
 
